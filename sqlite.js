@@ -21,20 +21,70 @@
  - **error**: `sqlite3` error
  - **rows**: array of rows that match the query
  */
-
-module.exports.open = function (path) {
-    return require('sqlite3-wrapper').open(path);
-};
-
-module.exports.select = function (db, query) {
-    return new Promise(function (resolve, reject) {
-        db.select(query, function (error, rows) {
-            if (error === null) {
-                resolve(rows);
-            } else {
-                reject(error);
+var db;
+module.exports = {
+    open: function (path) {
+        db= require('sqlite3-wrapper').open(path)
+    },
+    select: function(query){
+        return new Promise(function(resolve,reject){
+            if(db===undefined){
+                reject('Database not connected');
+            }else{
+                db.select(query,function(error,rows){
+                   if(error===null) {
+                       resolve(rows);
+                   } else{
+                       reject(error);
+                   }
+                });
+            } 
+        });
+    },
+    insert: function(table,row){
+        return new Promise(function(resolve,reject){
+            if(db===undefined){
+                reject('Database not connected');
+            }else{
+                db.insert(table,row,function(error,id){
+                    if(error===null) {
+                        resolve(id);
+                    } else{
+                        reject(error);
+                    }
+                });
             }
         });
-    });
-}
+    },
+    delete: function(table,where){
+        return new Promise(function(resolve,reject){
+            if(db===undefined){
+                reject('Database not connected');
+            }else{
+                db.delete(table,where,function(error,rowsDeleted){
+                    if(error===null) {
+                        resolve(rowsDeleted);
+                    } else{
+                        reject(error);
+                    }
+                });
+            }
+        });
+    },
+    update: function (table,where,row) {
+        return new Promise(function(resolve,reject){
+            if(db===undefined){
+                reject('Database is not connected');
+            }else{
+                db.update(table,where,row,function(error,updatedRows){
+                   if(error===null){
+                       resolve(updatedRows);
+                   }else{
+                       reject(error);
+                   }
+                });
+            }
+        });
 
+    }
+};
