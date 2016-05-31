@@ -1,4 +1,35 @@
 var _ = require("underscore");
+var Parser;
+var parser;
+
+
+module.exports ={
+    open:function(path){
+        var Parser = require('node-dbf');
+        parser = new Parser(path);
+    },
+    select:function(query){
+        var listOfRows =[];
+        return new Promise(function (resolve,reject){
+
+            parser.on('record', function (row) {
+                if(query.where===undefined){
+                    listOfRows.push(row);
+                }else if(_.isMatch(row,query.where)){
+                    listOfRows.push(row);
+                }
+            });
+
+            parser.on('end',function(e){
+                resolve (listOfRows);
+            });
+
+            parser.parse();
+        });
+    }
+}
+
+
 
 var Parser = require('node-dbf');
 var parser = new Parser('./employee.DBF');

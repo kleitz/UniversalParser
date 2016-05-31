@@ -7,12 +7,12 @@ var udp = require('./universal-parser.js')({
     dialect: 'sqlite'
 });
 
-
-/*
- select(query)==> promise
- -resolve: function(rows)--> returns rows as array
- -reject: function(error)--> returns ssqlite3 error message
- */
+//
+// /*
+//  select(query)==> promise
+//  -resolve: function(rows)--> returns rows as array
+//  -reject: function(error)--> returns ssqlite3 error message
+//  */
 // udp.select({table:'Users',fields:'email',where:{age:"20"}}).then(function(rows){
 //     console.log(rows);
 // },function(errors){
@@ -29,7 +29,7 @@ var udp = require('./universal-parser.js')({
 // },function(erorr){
 //     console.log(error);
 // });
-
+//
 // /*
 //  delete(table,where)==> promise
 //      -resolve: function(rowsDeleted)--> rowsDeleted is no of elements deleted
@@ -52,10 +52,21 @@ var udp = require('./universal-parser.js')({
 //     console.log(error);
 // });
 
-udp.join({table1: {name: "general_info", field: "name"}, table2: {name: "login_info", field: "name"}},
-          {fields:
-}).then(function (rows) {
+var join ={
+    table1:{
+        name:"login_info",
+        field:"name"
+    },
+    table2:{
+        name:"general_info",
+        field: "name"
+    }
+}
+
+var select ={fields:"username, password"}
+
+udp.join(join, select).then(function(rows){
     console.log(rows);
-}, function (error) {
-    console.log(error);
+},function(error){
+    console.log(error)
 });
