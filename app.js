@@ -6,7 +6,6 @@ var udp = require('./universal-parser.js')({
     location: './data/test2.sqlite',
     dialect: 'sqlite'
 });
-
 //
 // /*
 //  select(query)==> promise
@@ -51,22 +50,36 @@ var udp = require('./universal-parser.js')({
 // },function(error){
 //     console.log(error);
 // });
+//
+// var join ={
+//     table1:{
+//         name:"login_info",
+//         field:"name"
+//     },
+//     table2:{
+//         name:"general_info",
+//         field: "name"
+//     }
+// }
+//
+// var select ={fields:"username, password"}
+//
+// udp.join(join, select).then(function(rows){
+//     console.log(rows);
+// },function(error){
+//     console.log(error)
+// });
 
-var join ={
-    table1:{
-        name:"login_info",
-        field:"name"
-    },
-    table2:{
-        name:"general_info",
-        field: "name"
-    }
-}
 
-var select ={fields:"username, password"}
+var parser = require('./universal-parser.js')({
+    location: './data/employeee.DBF',
+    dialect: 'dbf'
+});
 
-udp.join(join, select).then(function(rows){
+var query = {fields: "EMP_NO EMP_NAME2 EMP_STREET", limit: 20, where: {EMP_NAME2: 'Darren'}};
+
+parser.select(query).then(function (rows) {
     console.log(rows);
-},function(error){
-    console.log(error)
+}, function (error) {
+    console.log(error);
 });

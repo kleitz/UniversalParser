@@ -28,6 +28,19 @@ module.exports = {
     open: function (path) {
         db = require('sqlite3-wrapper').open(path)
     },
+    /*## select(query)==>Prommise
+    
+    - **query**: an object, possible properties:
+         - **table** (required, string): table name
+         - **fields** (optional, string or array of strings): fields to return, e. g. ["title", "price"]
+         - **limit** (optional, integer): maximum number of records to return
+         - **offset** (optional, integer): number of records to skip
+         - **order** (optional, string): order, e.g. "name desc"0
+         - **where** (optional): `where` object
+    - **Promise** => (resolve(rows),reject(error))
+         - **error**: error message
+         - **rows**: array of rows that match the query
+    */
     select: function (query) {
         return new Promise(function (resolve, reject) {
             if (db === undefined) {

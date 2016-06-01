@@ -6,5 +6,10 @@ module.exports = function(dbInfo){
         db = require('./sqlite.js');
         db.open(dbInfo.location);
         return db;
+    }else if(dbInfo.dialect==='dbf'){
+        db=require('./dbf.js');
+        db.open(dbInfo.location);
+        return db;
     }
+    
 }
