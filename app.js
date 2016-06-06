@@ -1,7 +1,6 @@
 /**
  * Created by neils on 5/19/2016.
  */
-
 var udp = require('./universal-parser.js')({
     location: './data/test2.sqlite',
     dialect: 'sqlite'
@@ -70,16 +69,25 @@ var udp = require('./universal-parser.js')({
 //     console.log(error)
 // });
 
-
 var parser = require('./universal-parser.js')({
-    location: './data/employeee.DBF',
+    location: './data/employee.DBF',
     dialect: 'dbf'
 });
 
-var query = {fields: "EMP_NO EMP_NAME2 EMP_STREET", limit: 20, where: {EMP_NAME2: 'Darren'}};
+var query = {fields: "EMP_NO EMP_NAME2   EMP_STREET"};
 
-parser.select(query).then(function (rows) {
-    console.log(rows);
-}, function (error) {
-    console.log(error);
+// parser.select(query).then(function( record){
+//     console.log(record);
+// },function(error){
+//     console.log(error);
+// });
+
+var joinParams={
+    path:"./data/employee2.DBF",
+    field1:"EMP_NO",
+    field2:"EMP_NO"
+};
+
+parser.join(joinParams).then(function(joinedRows){
+    console.log(joinedRows.length);
 });

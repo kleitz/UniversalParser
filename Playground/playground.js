@@ -1,67 +1,39 @@
-// var _ = require("underscore");
-//
-// var Parser = require('node-dbf');
-// var parser = new Parser('./../data/employeee.DBF');
-//
-// parser.on('record', function (row) {
-//     console.log(row);
-// });
-//
-// //wWhen the parser reaches the end of the database file
-// parser.on('end',function(e){
-//     console.log("Ended");
-// });
-//
-// debugger;
-// parser.parse();
+/*
+implement join. return record at a time using callback or return entire thing?
 
+need:
+    location of dbf file 1
+    location of dbf file 2
+    values to compare in dbf file 1
+    value to compare in dbf file 2
 
-// function select(where) {
-//     var listOfRows =[];
+query:
+    same parameters as before
+// */
 //
-//     return new Promise(function (resolve,reject){
 //
-//         parser.on('record', function (row) {
-//             if(where===undefined){
-//                 listOfRows.push(row);
-//             }else if(_.isMatch(row,where)){
-//                 listOfRows.push(row);
+// Parser = require('node-dbf');
+// parser = new Parser('./../data/employee.DBF');
+//
+// parser.on("record",function(record){
+//
+//     testParser = new Parser('./../data/employee2.DBF');
+//     testParser.on("record",function(loginRecord){
+//         if(record.EMP_NAME2==loginRecord.EMP_NAME2 && record.EMP_NAME2!=''){
+//                 console.log(record.EMP_NAME2);
 //             }
-//
-//         });
-//
-//         //wWhen the parser reaches the end of the database file
-//         parser.on('end',function(e){
-//             resolve (listOfRows);
-//         });
-//
-//         parser.parse();
 //     });
-// }
+//     testParser.parse();
 //
-//
-// select().then(function(listOfRows){
-//     console.log(listOfRows);
 // });
 //
+// parser.parse();
 //
-// var list=[];
-// // console.log(list);
+// var _ = require('underscore');
+// var a ={name:"neil"};
+// var b ={age:20};
 //
-// var a ={name:"alisha"};
-// var b= {name:"neil"};
-//
-// var a = a||b;
-// console.log(a);
-//
-// a="My name is neil"
-// console.log(a.split(' '));
+// console.log(_.extend(a,b));
 
-// var _= require("underscore");
-// var stooges = [{name: 'moe', age: 40}, {name: 'larry', age: 50}, {name: 'curly', age: 60}];
-// console.log(_.sortBy(stooges, undefined&&"age"));
+var async = require('async');
 
-// console.log(5<undefined);
-//
-// var fruits = ["neil","alisha","disha","beena"];
-// console.log(fruits.slice(0,fruits.length));
