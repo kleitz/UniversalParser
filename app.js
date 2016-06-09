@@ -88,6 +88,6 @@ var joinParams={
     field2:"EMP_NO"
 };
 
-parser.join(joinParams).then(function(joinedRows){
-    console.log(joinedRows.length);
-});
+var rows=[];
+parser.join(joinParams);
+

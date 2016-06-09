@@ -36,4 +36,22 @@ query:
 // console.log(_.extend(a,b));
 
 var async = require('async');
+var parser = require('./universal-parser.js')({
+    location: './data/employee.DBF',
+    dialect: 'dbf'
+});
+
+var joinParams={
+    path:"./data/employee2.DBF",
+    field1:"EMP_NO",
+    field2:"EMP_NO"
+};
+
+var rows=[];
+
+parser.join(joinParams,function(row){
+    rows.push(row);
+    console.log(rows.length);
+});
+
 

@@ -80,30 +80,40 @@ module.exports = {
      */
     join: function (joinParams) {
         return new Promise(function(resolve,reject){
-            var rows =[];
+            var recordSet =[];
+            var recordSet2 =[];
+
             parser.on('record',function(record){
-                console.log("outer parse");
+                recordSet2.push(record);
+
+            });
+            parser.on('end',function(e){
+
                 var joinParser = new Parser(joinParams.path);
-                joinParser.on('record',function(joinRecord){
-                    console.log("inner parse");
-                    if(record[joinParams.field1] === joinRecord[joinParams.field2]){
-                        rows.push(_.extend(record,joinRecord));
-                    }
-                });
-                joinParser.on("end",function(){
-                    resolve();
+
+                joinParser.on('record',function(record){
+                    recordSet2.push(record);
                 });
 
-                joinParser.parse();
+                joinParser.on('end',function(){
+                    //Both the arrays are full
+                    resolve(joinArrays(recordSet2,recordSet2,field1,field2));
+
+                });
 
             });
-
-            parser.on('end',function(){
-                console.log("ended");
-                resolve(rows);
-            });
-
             parser.parse();
         });
+    }
+
+
+}
+
+function join(array1,array2,property1,property2){
+    //given 2 arrays of objects and property names return new array
+    var joinedArray=[];
+    
+    for(var i =0;i<array1.length;i++){
+        //find in array2 where array1[property1] =array2[]
     }
 }
