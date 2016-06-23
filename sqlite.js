@@ -15,7 +15,7 @@
  - **order** (optional, string): order, e.g. "name desc"
  - **where** (optional): `where` object
 
- It is also possible to pass a query string instead of a query object, `db.select('select distinct category from records', ...)`.
+ It is also possible to pass a query string instead of a query object, `connection.select('select distinct category from records', ...)`.
 
  - **callback** - (error, rows)
  - **error**: `sqlite3` error
@@ -118,7 +118,7 @@ module.exports = {
          - **order** (optional, string): order, e.g. "name desc"0
          - **where** (optional): `where` object
 
-    It is also possible to pass a query string instead of a query object, `db.select('select distinct category from records', ...)`.
+    It is also possible to pass a query string instead of a query object, `connection.select('select distinct category from records', ...)`.
 
     - **Promise** - (resolve(rows), reject(error))
          - **error**: `sqlite3` error
@@ -162,7 +162,7 @@ module.exports = {
             }
 
             // if (logQueries) console.log(queryString, queryParams)
-            // db.all(queryString, queryParams, cb)
+            // connection.all(queryString, queryParams, cb)
             //end of copied code
 
         });

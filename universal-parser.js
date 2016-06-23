@@ -10,6 +10,9 @@ module.exports = function(dbInfo){
         db=require('./dbf.js');
         db.open(dbInfo.location);
         return db;
+    } else if(dbInfo.dialect==='mysql'){
+        db=require('./mysql.js');
+        db.open(dbInfo.host,dbInfo.user,dbInfo.password,dbInfo.database);
+        return db;
     }
-    
 }

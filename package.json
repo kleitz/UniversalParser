@@ -1,7 +1,6 @@
 {
   "name": "webstorm-node-tutorial",
   "version": "1.0.0",
-  "description": "",
   "main": "playground.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
@@ -10,8 +9,20 @@
   "license": "ISC",
   "dependencies": {
     "dbffile": "^0.7.1",
+    "express": "^4.14.0",
+    "mysql-crud": "^0.1.4",
     "sqlite3": "^3.1.4",
     "sqlite3-wrapper": "^0.3.0",
     "underscore": "^1.8.3"
-  }
+  },
+  "devDependencies": {},
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/neils95/UniversalParser.git"
+  },
+  "bugs": {
+    "url": "https://github.com/neils95/UniversalParser/issues"
+  },
+  "homepage": "https://github.com/neils95/UniversalParser#readme",
+  "description": ""
 }

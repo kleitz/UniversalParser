@@ -72,20 +72,21 @@ module.exports = {
      - **order** (optional, string): order, e.g. "name desc"0
      - **where** (optional): `where` object
 
-     It is also possible to pass a query string instead of a query object, `db.select('select distinct category from records', ...)`.
+     It is also possible to pass a query string instead of a query object, `connection.select('select distinct category from records', ...)`.
 
      - **Promise** - (resolve(rows), reject(error))
      - **error**: `sqlite3` error
      - **rows**: array of rows that match the query
      */
-    join: function (joinParams) {
+
+    /*join: function (joinParams, callback) {
         return new Promise(function(resolve,reject){
             var recordSet =[];
             var recordSet2 =[];
 
+
             parser.on('record',function(record){
                 recordSet2.push(record);
-
             });
             parser.on('end',function(e){
 
@@ -104,7 +105,7 @@ module.exports = {
             });
             parser.parse();
         });
-    }
+    }*/
 
 
 }
