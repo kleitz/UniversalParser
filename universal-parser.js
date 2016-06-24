@@ -12,7 +12,7 @@ module.exports = function(dbInfo){
         return db;
     } else if(dbInfo.dialect==='mysql'){
         db=require('./mysql.js');
-        db.open(dbInfo.host,dbInfo.user,dbInfo.password,dbInfo.database);
+        db.open(dbInfo);
         return db;
     }
 }

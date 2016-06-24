@@ -23,6 +23,8 @@
  */
 var db;
 var _ = require('underscore');
+var queryGenerator = require('./sql-query-generator');
+
 
 module.exports = {
     open: function (path) {
@@ -143,8 +145,8 @@ module.exports = {
                 if((joinParams.table1.name&&joinParams.table2.field&&joinParams.table2.name&&joinParams.table2.field)===undefined){
                     reject("Missing Parameters in joinParams object");
                 }else {
-                    queryString = generateJoinQueryString(joinParams,selectParams);
-                    debugger;
+                    queryString = queryGenerator.toJoinQuery(joinParams,selectParams);
+
                     db.database().serialize(function(){
                         db.database().all(queryString,function(error,rows){
                            if(error===null){
@@ -160,58 +162,7 @@ module.exports = {
                 reject('First argument in select must be either a string or an object')
                 return
             }
-
-            // if (logQueries) console.log(queryString, queryParams)
-            // connection.all(queryString, queryParams, cb)
-            //end of copied code
-
+            
         });
     }
 };
-
-function generateWhereString(where){
-    if(where ===undefined || _.isEmpty(where)){
-        return undefined;
-    }
-    var whereArray = _.pairs(where);
-    var whereString ='';
-    for (var i =0;i<whereArray.length-1;i++){
-        whereString+=whereArray[i][0]+"="+"\'"+whereArray[i][1]+"\',";
-    }
-    return whereString+whereArray[i][0]+"="+"\'"+whereArray[i][1]+"\'";
-}
-
-function generateJoinQueryString(joinParams, selectParams){
-    /*
-     "SELECT ${fieldsString}
-     FROM ${table1.name}
-     INNER JOIN ${table2.name }
-     ON ${joinString}
-     WHERE ${whereString}
-     ORDER BY ${orderString}
-     LIMIT &{limitString}
-     OFFSET ${offsetString}
-     */
-    var fieldsString =(selectParams.fields||'*');
-    var joinString = joinParams.table1.name+"."+joinParams.table1.field+"=" +
-        joinParams.table2.name +"."+joinParams.table2.field;
-    var whereString = (((generateWhereString(selectParams.where) &&  " WHERE ") + (generateWhereString(selectParams.where)) )|| '');
-
-    var orderString = (((selectParams.order &&  " ORDER BY ") + selectParams.order )|| '');
-
-    var limitString =(((selectParams.limit &&  " LIMIT ") + selectParams.limit)|| '');
-
-    var offsetString =(((selectParams.offset &&  " OFFSET ") + selectParams.offset )|| '');
-
-    var queryString = "SELECT "+fieldsString +
-        " FROM " +joinParams.table1.name+
-        " INNER JOIN "+joinParams.table2.name +
-        " ON "+ joinString +
-        whereString +
-        orderString +
-        limitString +
-        offsetString;
-
-    return queryString;
-}
-

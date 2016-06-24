@@ -1,20 +1,11 @@
 var connection;
 var mysql =require('mysql');
-var _ = require('underscore');
-var queryGenerator = require('./query-generator');
+var queryGenerator = require('./sql-query-generator');
 
 module.exports ={
-     open:function(host,user,password,database){
-
-          connection = mysql.createConnection({
-               host:host,
-               user: user,
-               password:password,
-               database:database
-          });
-
+     open:function(connectionParams){
+          connection = mysql.createConnection(connectionParams);
      },
-
      /*## select(query)==>Promise
            - **query**: an object, possible properties:
            - **table** (required, string): table name
@@ -35,7 +26,6 @@ module.exports ={
                }
                connection.connect();
                connection.query(queryGenerator.toSelectQuery(query), function(err,rows){
-                    debugger;
                     if(err){
                          reject(err);
                     }else{
@@ -43,18 +33,97 @@ module.exports ={
                     }
                });
                connection.end();
-
           });
 
      },
-     delete:function(){
+     delete:function(table,where){
+          return new Promise(function (resolve, reject) {
+               if (connection === undefined) {
+                    reject('Database not connected');
+               } else {
 
+                    connection.query("DELETE FROM "+table+" WHERE "+queryGenerator.toWhereString(where),function(err,rows){
+                         debugger;
+                         if(err){
+                              reject(err);
+                         }else{
+                              resolve(rows);
+                         }
+                    });
+
+               }
+          });
      },
-     insert:function(){
+     update: function (table, where, row) {
+          return new Promise(function (resolve, reject) {
+               if (connection === undefined) {
+                    reject('Database not connected');
+               } else {
 
+                    connection.query("UPDATE "+table+" SET ? WHERE "+queryGenerator.toWhereString(where),row,function(err,rows){
+                         debugger;
+                         if(err){
+                              reject(err);
+                         }else{
+                              resolve(rows);
+                         }
+
+                    });
+
+               }
+          });
      },
-     join:function(){
+     insert: function (table, row) {
+          return new Promise(function (resolve, reject) {
+               if (connection === undefined) {
+                    reject('Database not connected');
+               } else {
+                    connection.query("INSERT INTO "+table+" set ?",row,function(err,rows){
+                         if(err){
+                              reject(err);
+                         }else{
+                              resolve(rows);
+                         }
+                         
+                    });
+                    
+               }
+          });
+     },
+     join: function(joinParams, selectParams) {
 
+          var selectParams = selectParams||{};    //test if selectParams is undefined
+          var queryString='';
+
+          return new Promise(function(resolve,reject){
+
+               if (connection === undefined) {
+                    reject("Database not connected");
+                    return
+               }
+               if (typeof joinParams === 'string') {
+                    queryString = joinParams;
+               }else if (typeof joinParams === 'object') {
+                    //joinParams is mandatory
+                    if((joinParams.table1.name&&joinParams.table2.field&&joinParams.table2.name&&joinParams.table2.field)===undefined){
+                         reject("Missing Parameters in joinParams object");
+                    }else {
+                         queryString = queryGenerator.toJoinQuery(joinParams,selectParams);
+                         var queryOptions = {sql: queryString, nestTables: '_'};
+                         connection.query(queryOptions,function(err,rows){
+                              if(err){
+                                   reject(err);
+                              }else{
+                                   resolve(rows);
+                              }
+                         });
+                    }
+
+               }else{
+                    reject('First argument in select must be either a query string or an object');
+               }
+
+          });
      }
 
  };
